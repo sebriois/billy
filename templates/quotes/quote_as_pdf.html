@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>{{ quote.quote_id }}</title>
+    <style type="text/css">
+        body {
+            font-family: "Proxima Nova";
+            font-weight: 200;
+            font-size: 14px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            table-layout: fixed;
+            max-width: 100%;
+            background-color: transparent;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        th {
+            padding: 5px 10px 5px 20px;
+            text-align: left;
+            color: #ffffff;
+            font-size: 12px;
+            background-color: #3c3d3a;
+        }
+        .item-col {
+            padding: 5px 10px 5px 20px;
+            font-size: 9pt;
+            border-bottom: 1px solid #adadad;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        #logo {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            background: #36be8a;
+        }
+        #customer {
+            border: 1px solid #ccc;
+            padding:30px;
+            margin-left:400px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .orgname {
+            font-size: 10pt;
+            color: #333333;
+        }
+        .label {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .entitytitle {
+            font-size: 28pt;
+            color: #000000;
+        }
+        .entitynumber {
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td>
+            <div id="logo"></div>
+            <span class="orgname">
+                <b>Sébastien Briois</b>
+            </span>
+            <br>
+            <span class="label">
+                27 grand rue<br>
+                31460 Loubens Lauragais<br>
+                06.84.10.53.00<br>
+                N° SIRET:83268885700016
+            </span>
+        </td>
+        <td style="text-align:right">
+            <span class="entitytitle">DEVIS</span>
+            <br>
+            <span class="entitynumber label">
+                N° du devis {{ quote.quote_id }}<br>
+                {{ quote.creation_date|date:"d/m/Y" }}
+            </span>
+        </td>
+    </tr>
+</table>
+<div id="customer">
+    {{ quote.contact.name }}
+</div>
+<table id="items">
+    <thead>
+    <tr>
+        <th>Désignation</th>
+        <th>PU HT</th>
+        <th>Qté</th>
+        <th>Total HT</th>
+        <th>TVA</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in quote.quoteitem_set.all %}
+        <tr>
+        <td class="item-col" width="600px">{{ item.description }}</td>
+        <td class="item-col">{{ item.unit_price }}</td>
+        <td class="item-col">{{ item.quantity }}</td>
+        <td class="item-col">{{ item.total_price }}</td>
+        <td class="item-col">0.00%</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

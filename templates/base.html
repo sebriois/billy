@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="MSSmartTagsPreventParsing" content="TRUE" />
+  <meta name="robots" content="noindex, nofollow">
+  <title>Sebio - {% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'vendor/font-awesome-4.7.0/css/font-awesome.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap-4.0.0-alpha.6/dist/css/bootstrap.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body {% block extra_body %}{% endblock %}>
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded" style="background: #553d7b">
+  <button class="navbar-toggler navbar-toggler-right" type="button"
+          data-toggle="collapse" data-target="#navbarTogglerDemo02"
+          aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'homepage' %}"><span class="fa fa-home"></span> Accueil</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'quotes:index' %}">Devis</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'contacts:index' %}">Contacts</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="p-3 mb-3" style="background: #F5F5F5;border-bottom:1px solid #E1E1E1;color:#666;">
+    {% block page_header %}{% endblock %}
+</div>
+
+<div class="container-fluid">
+    {% block page_content %}{% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+    <h3><span class="fa fa-user"></span> Add a new contact</h3>
+    <a class="btn btn-primary pull-right" href="{% url 'contacts:new' %}">
+        <i class="fa fa-plus"></i> New contact
+    </a>
+{% endblock %}
+
+{% block page_content %}
+<form action="{% url 'contacts:new' %}" method="POST">{% csrf_token %}
+    {% for field in form %}
+        <div class="row">
+            <div class="col-md-3">{{ field.label_tag }}</div>
+            <div class="col-md-8">{{ field }}</div>
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-8">
+            <button type="submit" class="btn btn-success">
+                <span class="fa fa-plus"></span> Save
+            </button>
+            <a class="btn btn-danger" href="{% url 'contacts:index' %}">
+                <span class="fa fa-close"></span> Cancel
+            </a>
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+    <h3>Devis</h3>
+{% endblock %}
+
+{% block page_content %}
+    <div class="container">
+<table class="table table-bordered border-left-0 border-right-0 border-bottom-0">
+    <thead class="thead-default">
+        <tr>
+            <th class="text-center">#</th>
+            <th>Date</th>
+            <th>Numéro de devis</th>
+            <th>Client</th>
+            <th>Statut</th>
+            <th>Montant</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for quote in quote_list %}
+        <tr>
+        <th class="text-center">{{ forloop.counter }}</th>
+        <td>{{ quote.creation_date|date:"d/m/Y" }}</td>
+        <td>
+            <a href="{% url 'quotes:item' quote.id %}">
+                {{ quote.quote_id }}
+            </a>
+        </td>
+        <td>{{ quote.contact.name }}</td>
+        <td>{{ quote.get_status_display }}</td>
+        <td>{{ quote.total_price|floatformat:2 }}€</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    </div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+<div class="clearfix">
+    <h3 class="border-top-0 border-right-0 border-left-0 clearfix mt-3 mb-3 float-left">
+        N° de devis: {{ quote.quote_id }}
+    </h3>
+    <div class="float-right mt-2">
+        <a href="{% url 'quotes:pdf' quote.id %}" class="btn btn-primary">
+            <i class="fa fa-download"></i>
+        </a>
+        <div class="btn-group">
+            <a class="btn btn-success disabled" href="{% url 'quotes:pdf' quote.id %}">
+                <i class="fa fa-file-text"></i> créer facture
+            </a>
+            <a class="btn btn-danger" href="#">
+                <i class="fa fa-trash"></i> supprimer
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_content %}
+<div class="container">
+    <div class="row mb-2">
+        <div class="col col-lg-4 col-md-5 col-sm-6">
+            <div class="card">
+                <div class="card-block text-nowrap">
+                    <a href="{% url 'contacts:item' quote.contact.id %}" class="btn btn-primary btn-sm float-right text-white">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <address>
+                        <strong>{{ quote.contact.name }}</strong><br/>
+                        {{ quote.contact.address1|default:"-" }}<br/>
+                        {{ quote.contact.address2|default:"-" }}<br/>
+                        {{ quote.contact.zip_code }} {{ quote.contact.city }}<br/>
+                    </address>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="btn-group btn-group-sm float-right">
+                <a href="{% url 'quotes:set-status' quote.pk %}?status=1" class="btn {% if quote.status == 1 %}btn-warning{% else %}btn-secondary{% endif %}">
+                    <i class="fa fa-italic"></i> Brouillon
+                </a>
+                <a href="{% url 'quotes:set-status' quote.pk %}?status=2" class="btn {% if quote.status == 2 %}btn-info{% else %}btn-secondary{% endif %}">
+                    <i class="fa fa-paper-plane"></i> Envoyé
+                </a>
+                <a href="#" class="btn btn-secondary {% if quote.status == 1 %}disabled{% endif %}"><i class="fa fa-check"></i> Bon pour accord</a>
+            </div>
+        </div>
+        <div class="w-100"></div>
+        <div class="col col-lg-9 col-md-7 col-sm-5"></div>
+        <div class="col">
+            Date du devis: {{ quote.creation_date|date:"d/m/Y" }}
+        </div>
+    </div>
+    <table class="table table-bordered border-left-0 border-right-0 border-bottom-0">
+        <thead class="thead-default">
+        <tr>
+            <th class="text-center">#</th>
+            <th>Description</th>
+            <th>PU HT</th>
+            <th>Quantité</th>
+            <th width="140px">Total HT</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in quote.quoteitem_set.all %}
+            <tr>
+                <th>{{ forloop.counter }}</th>
+                <td>{{ item.description }}</td>
+                <td>{{ item.unit_price }}€</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.total_price }}€</td>
+                {% if quote.status == 1 %}
+                <td class="border-right-0 border-top-0 border-bottom-0 align-middle">
+                    <form method="POST" action="{% url 'quotes:quote-item-delete' item.id %}">{% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" style="cursor:pointer">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        <tr>
+            <th class="border-0">
+                {% if quote.status == 1 %}
+                    <a href="#" class="btn btn-success btn-sm"><i class="fa fa-plus"></i></a>
+                {% endif %}
+            </th>
+            <td colspan="3" align="right" class="border-0">Sous-total</td>
+            <td class="border-0">{{ quote.total_price|floatformat:2 }}€</td>
+        </tr>
+        <tr>
+            <td colspan="4" align="right" class="border-0">TVA</td>
+            <td class="border-0">0,00%</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="border-0"></td>
+            <td colspan="2" align="right" class="border-0" style="background:#F5F5F5">Total</td>
+            <td class="border-0" style="background:#F5F5F5">{{ quote.total_price|floatformat:2 }}€</td>
+        </tr>
+        </tbody>
+    </table>
+    {% if quote.status == 1 %}
+        <h4>Ajout d'une réalisation</h4>
+        <div class="row">
+            <div class="col-4">
+                <form action="{% url 'quotes:quote-item-add' %}" method="post">{% csrf_token %}
+                    <input type="hidden" name="quote" value="{{ quote.id }}" />
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" name="description" id="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="unit_price">PU HT</label>
+                        <input type="text" class="form-control" name="unit_price" id="unit_price" value="54.14" />
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantité</label>
+                        <input type="text" class="form-control" name="quantity" id="quantity" value="1"/>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-sm" style="cursor:pointer">
+                        <span class="fa fa-plus"></span> Ajouter
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

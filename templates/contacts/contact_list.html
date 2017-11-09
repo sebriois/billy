@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+    <div class="clearfix">
+    <h3 class="float-left">Contacts</h3>
+    <a class="btn btn-primary float-right" href="{% url 'contacts:new' %}">
+        <i class="fa fa-plus"></i> New contact
+    </a>
+    </div>
+{% endblock %}
+
+{% block page_content %}
+    <table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>E-mail</th>
+            <th>Devis validés</th>
+            <th>Factures impayées</th>
+            <th>Factures payées</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for contact in contact_list %}
+        <tr>
+            <th>{{ forloop.counter }}</th>
+            <td>{{ contact.name }}</td>
+            <td>{{ contact.get_address_display }}</td>
+            <td>{{ contact.email }}</td>
+            <td>{{ contact.validated_quotes }}</td>
+            <td>{{ contact.due_invoices_this_year }}</td>
+            <td>{{ contact.paid_invoices_this_year }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm pull-right" href="{% url 'contacts:new-quote' contact.id %}">
+                    <i class="fa fa-plus"></i> New quote
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
